@@ -1,4 +1,0 @@
-username: tushar	password: 1234
-username: pravin	password: rebelwithagun
-username: aman	password: aman
-username: Anish	password: pakistan
