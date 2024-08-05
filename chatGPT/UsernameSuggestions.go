@@ -1,4 +1,4 @@
-package main
+package chatGPT
 
 import (
 	"encoding/json"
@@ -14,22 +14,30 @@ func init() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
 }
 
 const (
-	apiEndpoint = "https://api.openai.com/v1/chat/completions"
+	apiEndpoint   = "https://api.openai.com/v1/chat/completions"
+	generalPrompt = "This request is automated please respond carefully or it might break the system. Only generate output in the specified format. Give answers to the best of your ability. "
 )
 
-func main() {
+func UsernameSuggestion() string {
 	apiKey := os.Getenv("OPENAI_API")
 	client := resty.New()
+
+	var (
+		usernamePrompt = fmt.Sprintf("Task: Generate 5 usernames inspired from movies! Output format : 1. name1 \n2. name2 \n3. name3\n4. name4\n5. name5\n")
+	)
+
+	finalPrompt := generalPrompt + usernamePrompt
 
 	response, err := client.R().
 		SetAuthToken(apiKey).
 		SetHeader("Content-Type", "application/json").
 		SetBody(map[string]interface{}{
 			"model":      "gpt-4",
-			"messages":   []interface{}{map[string]interface{}{"role": "system", "content": "Hi can you tell me what is the factorial of 10?"}},
+			"messages":   []interface{}{map[string]interface{}{"role": "system", "content": finalPrompt}},
 			"max_tokens": 50,
 		}).
 		Post(apiEndpoint)
@@ -44,9 +52,9 @@ func main() {
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		fmt.Println("Error while decoding JSON response:", err)
-		return
+		return ""
 	}
 
 	content := data["choices"].([]interface{})[0].(map[string]interface{})["message"].(map[string]interface{})["content"].(string)
-	fmt.Println(content)
+	return content
 }

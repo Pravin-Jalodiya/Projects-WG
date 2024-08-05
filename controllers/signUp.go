@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"projects/chatGPT"
 	"projects/config"
 	"projects/models"
 	"projects/utils"
@@ -21,7 +22,7 @@ var (
 func SignUp() {
 
 	for {
-		fmt.Print("Enter your desired username: ")
+		fmt.Print("\nEnter your desired username: ")
 		user, err := reader.ReadString('\n')
 		user = strings.TrimSuffix(user, "\n")
 		user = strings.TrimSpace(user)
@@ -32,6 +33,17 @@ func SignUp() {
 		} else {
 			if !utils.UniqueUser(user) {
 				fmt.Println("Username already exists. Please choose a different username.")
+				fmt.Println("Need help with finding a unique username?(y/n)")
+				choice, err := reader.ReadString('\n')
+				if err != nil {
+					fmt.Println("Error reading input.")
+				}
+				choice = strings.TrimSuffix(choice, "\n")
+				choice = strings.TrimSpace(choice)
+				if choice == "y" {
+					suggestedUsernames := chatGPT.UsernameSuggestion()
+					fmt.Printf("Username suggestions\n%s", suggestedUsernames)
+				}
 			} else {
 				username = user
 				break
@@ -50,6 +62,17 @@ func SignUp() {
 		} else {
 			if !utils.PasswordValidator(pass) {
 				fmt.Println("Weak password. Try another password (password should be at least 8  characters long and must have at least 1 lowercase, 1 uppercase, 1 special and 1 digit characters.")
+				fmt.Println("Need help with finding the right password?(y/n)")
+				choice, err := reader.ReadString('\n')
+				if err != nil {
+					fmt.Println("Error reading input.")
+				}
+				choice = strings.TrimSuffix(choice, "\n")
+				choice = strings.TrimSpace(choice)
+				if choice == "y" {
+					suggestedPass := chatGPT.PasswordSuggestion()
+					fmt.Println("Password suggestion : " + suggestedPass)
+				}
 			} else {
 				password = pass
 				break
