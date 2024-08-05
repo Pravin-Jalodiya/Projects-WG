@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
+	"projects/config"
 )
 
 func init() {
@@ -31,7 +32,7 @@ func PasswordSuggestion() string {
 		SetAuthToken(apiKey).
 		SetHeader("Content-Type", "application/json").
 		SetBody(map[string]interface{}{
-			"model":      "gpt-4",
+			"model":      config.GPT_MODEL,
 			"messages":   []interface{}{map[string]interface{}{"role": "system", "content": finalPrompt}},
 			"max_tokens": 50,
 		}).
