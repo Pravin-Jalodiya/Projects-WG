@@ -1,13 +1,13 @@
-package services
+package dailyStatus
 
 import (
 	"fmt"
-	"projects/utils"
+	"projects/utils/readers"
 )
 
 func viewDailyStatus(currentUser string) {
-	fmt.Println("----------------Your daily status----------------")
-	for _, v := range utils.UserStore {
+	fmt.Println("----------------Your dailyStatus status----------------")
+	for _, v := range readers.UserStore {
 		if v.Username == currentUser {
 			for _, v := range v.DailyStatus {
 				fmt.Printf("\nDate : %s\nTime : %s\nModules completed\n", v.Date, v.Time)

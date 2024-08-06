@@ -5,6 +5,7 @@ type UserData struct {
 	Password    string
 	ToDo        []Course
 	DailyStatus []DailyStatus
+	Progress    []UserProgress
 }
 
 type Module struct {
@@ -18,9 +19,10 @@ type Course struct {
 	Modules []Module
 }
 
-//type UserProgress struct {
-//	CompletedModules []float32
-//}
+type UserProgress struct {
+	CID        int
+	Completion int
+}
 
 type DailyStatus struct {
 	Date            string

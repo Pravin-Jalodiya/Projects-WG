@@ -1,13 +1,13 @@
-package services
+package todo
 
 import (
 	"fmt"
-	"projects/utils"
+	"projects/utils/readers"
 )
 
 func viewToDo(currentUser string) {
 	fmt.Println("----------------Your to do list----------------")
-	for _, v := range utils.UserStore {
+	for _, v := range readers.UserStore {
 		//fmt.Println(v, v.Username)
 		if v.Username == currentUser {
 			for _, v := range v.ToDo {

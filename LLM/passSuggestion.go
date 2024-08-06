@@ -1,4 +1,4 @@
-package chatGPT
+package LLM
 
 import (
 	"encoding/json"
@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"projects/config"
+	"projects/utils/math"
 )
 
 func init() {
@@ -23,7 +24,7 @@ func PasswordSuggestion() string {
 	client := resty.New()
 
 	var (
-		passwordPrompt = fmt.Sprintf("Task: Generate a very strong password of minimum 12 character length containing at least 1  uppercase, 1 lowercase, 1 digit  and 1 special character")
+		passwordPrompt = fmt.Sprintf("Task: Generate a very strong password of minimum 12 character length containing at least 1  uppercase, 1 lowercase, 1 digit  and 1 special character. Also you must use these digits %d in your password generation randomly. Output : Just return the password itself", math.RandomInt())
 	)
 
 	finalPrompt := generalPrompt + passwordPrompt

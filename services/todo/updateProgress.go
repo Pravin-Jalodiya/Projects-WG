@@ -1,19 +1,20 @@
-package services
+package todo
 
 import (
 	"fmt"
 	"projects/config"
 	"projects/models"
-	"projects/utils"
+	"projects/services/dailyStatus"
+	"projects/utils/readers"
+	"projects/utils/writers"
 )
 
-func markModules(currentUser string) {
-	//fmt.Println(utils.UserStore)
+func updateProgress(currentUser string) {
 	fmt.Print("Enter MID of the module to be marked as done: ")
 	var MID float32
 	fmt.Scan(&MID)
 	var completedModules []models.Module
-	for i, val1 := range utils.UserStore {
+	for i, val1 := range readers.UserStore {
 		if val1.Username == currentUser {
 			for j, val2 := range val1.ToDo {
 				var filteredModules []models.Module
@@ -24,18 +25,17 @@ func markModules(currentUser string) {
 						completedModules = append(completedModules, val3)
 					}
 				}
-				utils.UserStore[i].ToDo[j].Modules = filteredModules
+				readers.UserStore[i].ToDo[j].Modules = filteredModules
 			}
 		}
 	}
 
-	dailyStatusUpdate(currentUser, completedModules)
+	dailyStatus.UpdateStatus(currentUser, completedModules)
 
 	fmt.Printf("Module %.1f marked as done\nDaily status updated\n", MID)
-	_, err := utils.FWriterToDo(config.USER_FILE, utils.UserStore)
+	_, err := writers.FWriterToDo(config.USER_FILE, readers.UserStore)
 	if err != nil {
 		fmt.Println("Error writing to file.")
 		return
 	}
-
 }

@@ -1,13 +1,13 @@
-package services
+package todo
 
 import (
 	"fmt"
 )
 
-func toDo(currentUser string) {
+func Main(currentUser string) {
 	var choice int
 	for {
-		fmt.Printf("\n-----------------ToDo list-----------------\n\nPlease select an option\n1. View ToDo list\n2. Mark as done\n3. Go back\n")
+		fmt.Printf("\n-----------------TODO LIST-----------------\n\nPlease select an option\n1. View ToDo list\n2. Update Progress\n3. Go back\n")
 		_, err := fmt.Scanln(&choice)
 		if err != nil {
 			fmt.Println("Invalid input:", err)
@@ -19,7 +19,7 @@ func toDo(currentUser string) {
 			viewToDo(currentUser)
 
 		case 2:
-			markAsDone(currentUser)
+			updateProgress(currentUser)
 
 		case 3:
 			return

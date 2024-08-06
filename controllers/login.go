@@ -2,10 +2,13 @@ package controllers
 
 import (
 	"fmt"
+	"golang.org/x/term"
 	"projects/middleware"
 	"projects/services"
-	"projects/utils"
+	password2 "projects/utils/password"
+	"projects/utils/readers"
 	"strings"
+	"syscall"
 )
 
 func Login() {
@@ -23,22 +26,21 @@ func Login() {
 	}
 
 	fmt.Print("Enter your password: ")
-	pass, err2 := reader.ReadString('\n')
-	pass = strings.TrimSuffix(pass, "\n")
-	pass = strings.TrimSpace(pass)
-	if err2 != nil {
+	secret, err := term.ReadPassword(syscall.Stdin)
+	if err != nil {
 		fmt.Println("Error reading input.")
-		//log errors
 		return
-	} else {
-		password = pass
 	}
+	fmt.Println()
+	pass := string(secret)
+	pass = strings.TrimSpace(pass)
+	password = pass
 
-	if storedHash, exists := utils.UserMap[username]; exists {
-		if utils.VerifyPassword(password, storedHash) {
+	if storedHash, exists := readers.UserMap[username]; exists {
+		if password2.VerifyPassword(password, storedHash) {
 			fmt.Println("Login successful")
 			middleware.Auth(username)
-			services.Services()
+			services.Main()
 		} else {
 			fmt.Println("Incorrect username or password")
 		}

@@ -1,11 +1,13 @@
-package services
+package dailyStatus
 
-import "fmt"
+import (
+	"fmt"
+)
 
-func dailyStatus(currentUser string) {
+func Main(currentUser string) {
 	var choice int
 	for {
-		fmt.Printf("\n-----------------ToDo list-----------------\n\nPlease select an option\n1. View daily status\n2. Go back\n")
+		fmt.Printf("\n-----------------TODO LIST-----------------\n\nPlease select an option\n1. View dailyStatus status\n2. Go back\n")
 		_, err := fmt.Scanln(&choice)
 		if err != nil {
 			fmt.Println("Invalid input:", err)

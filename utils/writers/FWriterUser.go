@@ -1,4 +1,4 @@
-package utils
+package writers
 
 import (
 	"encoding/json"
@@ -6,13 +6,14 @@ import (
 	"os"
 	"projects/config"
 	"projects/models"
+	"projects/utils/readers"
 )
 
-func FWriterToDo(f string, newUser []models.UserData) (bool, error) {
+func FWriterUser(f string, newUser models.UserData) (bool, error) {
 
-	users := FReaderUser(f, os.O_CREATE|os.O_APPEND|os.O_RDWR)
+	users := readers.FReaderUser(f, os.O_CREATE|os.O_APPEND|os.O_RDWR)
 
-	users = newUser
+	users = append(users, newUser)
 
 	// Write updated users back to file
 	jsonData, err := json.Marshal(users)
@@ -26,6 +27,7 @@ func FWriterToDo(f string, newUser []models.UserData) (bool, error) {
 		log.Printf("Error writing to file: %v\n", err)
 		return false, err
 	}
-	UserStore = FReaderUser(config.USER_FILE, os.O_RDONLY|os.O_CREATE)
+	readers.UserMap[newUser.Username] = newUser.Password
+	readers.UserStore = readers.FReaderUser(config.USER_FILE, os.O_RDONLY|os.O_CREATE)
 	return true, nil
 }

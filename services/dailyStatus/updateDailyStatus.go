@@ -1,12 +1,12 @@
-package services
+package dailyStatus
 
 import (
 	"projects/models"
-	"projects/utils"
+	"projects/utils/readers"
 	time2 "time"
 )
 
-func dailyStatusUpdate(currentUser string, completedModules []models.Module) {
+func UpdateStatus(currentUser string, completedModules []models.Module) {
 
 	dateTime := time2.Now()
 	dailyStatusUpdate := models.DailyStatus{
@@ -15,9 +15,9 @@ func dailyStatusUpdate(currentUser string, completedModules []models.Module) {
 		TopicsCompleted: completedModules,
 	}
 
-	for i, val1 := range utils.UserStore {
+	for i, val1 := range readers.UserStore {
 		if val1.Username == currentUser {
-			utils.UserStore[i].DailyStatus = append(utils.UserStore[i].DailyStatus, dailyStatusUpdate)
+			readers.UserStore[i].DailyStatus = append(readers.UserStore[i].DailyStatus, dailyStatusUpdate)
 		}
 	}
 }

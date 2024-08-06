@@ -1,4 +1,4 @@
-package chatGPT
+package LLM
 
 import (
 	"encoding/json"
@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"projects/config"
+	"projects/utils/math"
 )
 
 func init() {
@@ -28,7 +29,7 @@ func UsernameSuggestion() string {
 	client := resty.New()
 
 	var (
-		usernamePrompt = fmt.Sprintf("Task: Generate 5 usernames inspired from movies! Output format : 1. name1 \n2. name2 \n3. name3\n4. name4\n5. name5\n")
+		usernamePrompt = fmt.Sprintf("Task: Generate five creative 1 word usernames and also use these digits %d in random fashion for username generation! Output format : 1. name1 \n2. name2 \n3. name3\n4. name4\n5. name5\n", math.RandomInt())
 	)
 
 	finalPrompt := generalPrompt + usernamePrompt

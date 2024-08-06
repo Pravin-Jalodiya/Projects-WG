@@ -1,4 +1,4 @@
-package utils
+package password
 
 import (
 	"unicode"
@@ -8,7 +8,7 @@ const minPasswordLength = 8 // Minimum allowed length for a strong password
 
 // PasswordValidator evaluates the strength of a password based on several criteria.
 // Returns true if the password meets the minimum requirements; otherwise, false.
-func PasswordValidator(password string) bool {
+func ValidatePass(password string) bool {
 	if len(password) < minPasswordLength {
 		return false
 	}

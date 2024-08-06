@@ -3,13 +3,19 @@ package controllers
 import (
 	"bufio"
 	"fmt"
+	"golang.org/x/term"
 	"os"
-	"projects/chatGPT"
+	"projects/LLM"
 	"projects/config"
 	"projects/models"
-	"projects/utils"
+	age2 "projects/utils/age"
+	"projects/utils/course"
+	password2 "projects/utils/password"
+	user2 "projects/utils/user"
+	"projects/utils/writers"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 var (
@@ -31,7 +37,7 @@ func SignUp() {
 			//log errors
 			return
 		} else {
-			if !utils.UniqueUser(user) {
+			if !user2.IsUnique(user) {
 				fmt.Println("Username already exists. Please choose a different username.")
 				fmt.Println("Need help with finding a unique username?(y/n)")
 				choice, err := reader.ReadString('\n')
@@ -41,7 +47,7 @@ func SignUp() {
 				choice = strings.TrimSuffix(choice, "\n")
 				choice = strings.TrimSpace(choice)
 				if choice == "y" {
-					suggestedUsernames := chatGPT.UsernameSuggestion()
+					suggestedUsernames := LLM.UsernameSuggestion()
 					fmt.Printf("Username suggestions\n%s", suggestedUsernames)
 				}
 			} else {
@@ -53,29 +59,50 @@ func SignUp() {
 
 	for {
 		fmt.Print("Enter your password: ")
-		pass, err := reader.ReadString('\n')
-		pass = strings.TrimSuffix(pass, "\n")
-		pass = strings.TrimSpace(pass)
+		secret1, err := term.ReadPassword(syscall.Stdin)
+		fmt.Println()
+		pass1 := string(secret1)
+		pass1 = strings.TrimSpace(pass1)
 		if err != nil {
 			fmt.Println("Error reading input.")
 			return
 		} else {
-			if !utils.PasswordValidator(pass) {
-				fmt.Println("Weak password. Try another password (password should be at least 8  characters long and must have at least 1 lowercase, 1 uppercase, 1 special and 1 digit characters.")
+			if !password2.ValidatePass(pass1) {
+				fmt.Println("Weak password. Try another password (should be at least 8  characters long and must have at least 1 lowercase, 1 uppercase, 1 special and 1 digit characters.)")
 				fmt.Println("Need help with finding the right password?(y/n)")
-				choice, err := reader.ReadString('\n')
-				if err != nil {
-					fmt.Println("Error reading input.")
-				}
-				choice = strings.TrimSuffix(choice, "\n")
-				choice = strings.TrimSpace(choice)
-				if choice == "y" {
-					suggestedPass := chatGPT.PasswordSuggestion()
-					fmt.Println("Password suggestion : " + suggestedPass)
+				for {
+					choice, err := reader.ReadString('\n')
+					if err != nil {
+						fmt.Println("Error reading input.")
+					}
+					choice = strings.TrimSuffix(choice, "\n")
+					choice = strings.TrimSpace(choice)
+					if choice == "y" {
+						suggestedPass := LLM.PasswordSuggestion()
+						fmt.Println("Password suggestion : " + suggestedPass)
+						break
+					} else {
+						if choice == "n" {
+							break
+						}
+						fmt.Println("Invalid input. Please try again.")
+					}
 				}
 			} else {
-				password = pass
-				break
+				fmt.Print("Enter your password again: ")
+				secret2, err := term.ReadPassword(syscall.Stdin)
+				fmt.Println()
+				if err != nil {
+					fmt.Println("Error reading input.")
+					return
+				}
+				pass2 := string(secret2)
+				pass2 = strings.TrimSpace(pass2)
+				if pass1 == pass2 {
+					password = pass2
+					break
+				}
+				fmt.Println("Passwords don't match. Try again.")
 			}
 		}
 	}
@@ -83,6 +110,7 @@ func SignUp() {
 	for {
 		fmt.Print("Enter your age: ")
 		ageString, err := reader.ReadString('\n')
+		fmt.Println()
 		ageString = strings.TrimSuffix(ageString, "\n")
 		ageString = strings.TrimSpace(ageString)
 		if err != nil {
@@ -94,7 +122,7 @@ func SignUp() {
 				fmt.Println("Not a number")
 				continue
 			}
-			if utils.ValidAge(age) {
+			if age2.ValidAge(age) {
 				break
 			} else {
 				fmt.Println("Please enter a valid age (range 1-150)")
@@ -102,20 +130,49 @@ func SignUp() {
 		}
 	}
 
-	if !utils.VerifyAge(age) {
+	if !age2.VerifyAge(age) {
 		fmt.Println("Sign up failed : Minimum age criteria not met.")
 		return
 	}
 
-	hashedPassword, err := utils.HashPassword(password)
+	hashedPassword, err := password2.HashPass(password)
 	if err != nil {
 		fmt.Println("Error hashing password.")
 		return
 	}
 
-	newUser := models.UserData{Username: username, Password: hashedPassword, ToDo: utils.Courses}
+	course.View()
+	courseChoice := make([]int, 0)
+	for {
+		fmt.Print("Enter CID of course you want to enroll in (put 0 to exit) : ")
+		cidString, err := reader.ReadString('\n')
+		cidString = strings.TrimSuffix(cidString, "\n")
+		cidString = strings.TrimSpace(cidString)
+		if err != nil {
+			fmt.Println("Error reading age.")
+			return
+		} else {
+			cid, err := strconv.Atoi(cidString)
+			if err != nil {
+				fmt.Println("Not a number")
+				continue
+			} else {
+				if cid >= config.COURSE_FIRST && cid <= config.COURSE_LAST {
+					courseChoice = append(courseChoice, cid)
+				} else if cid == 0 {
+					break
+				} else {
+					fmt.Println("Invalid CID")
+				}
+			}
+		}
+	}
 
-	ok, err := utils.FWriterUser(config.USER_FILE, newUser)
+	userCourses := course.Get(courseChoice...)
+
+	newUser := models.UserData{Username: username, Password: hashedPassword, ToDo: userCourses}
+
+	ok, err := writers.FWriterUser(config.USER_FILE, newUser)
 	if ok {
 		fmt.Println("Sign up successful!")
 	} else {
