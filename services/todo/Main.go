@@ -2,12 +2,13 @@ package todo
 
 import (
 	"fmt"
+	"projects/config"
 )
 
 func Main(currentUser string) {
 	var choice int
 	for {
-		fmt.Printf("\n-----------------TODO LIST-----------------\n\nPlease select an option\n1. View ToDo list\n2. Update Progress\n3. Go back\n")
+		fmt.Printf("\n%sTODO%s\n\nPlease select an option\n1. View ToDo list\n2. Update ToDo & Daily status\n3. Go back\n", config.STR_DECOR, config.STR_DECOR)
 		_, err := fmt.Scanln(&choice)
 		if err != nil {
 			fmt.Println("Invalid input:", err)

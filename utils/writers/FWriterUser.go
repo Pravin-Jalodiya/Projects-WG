@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"projects/config"
 	"projects/models"
 	"projects/utils/readers"
 )
@@ -28,6 +27,6 @@ func FWriterUser(f string, newUser models.UserData) (bool, error) {
 		return false, err
 	}
 	readers.UserMap[newUser.Username] = newUser.Password
-	readers.UserStore = readers.FReaderUser(config.USER_FILE, os.O_RDONLY|os.O_CREATE)
+	readers.SyncUserData()
 	return true, nil
 }

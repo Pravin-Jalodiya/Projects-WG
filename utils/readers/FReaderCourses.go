@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"projects/config"
 	"projects/models"
 )
 
@@ -14,7 +13,7 @@ var (
 )
 
 func init() {
-	Courses = FReaderCourses(config.COURSE_FILE, os.O_RDONLY)
+	SyncCourseData()
 }
 
 func FReaderCourses(f string, flag int) []models.Course {

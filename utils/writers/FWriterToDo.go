@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"projects/config"
 	"projects/models"
 	"projects/utils/readers"
 )
@@ -15,7 +14,6 @@ func FWriterToDo(f string, newUser []models.UserData) (bool, error) {
 
 	users = newUser
 
-	// Write updated users back to file
 	jsonData, err := json.Marshal(users)
 	if err != nil {
 		log.Printf("Error marshaling data: %v\n", err)
@@ -27,6 +25,6 @@ func FWriterToDo(f string, newUser []models.UserData) (bool, error) {
 		log.Printf("Error writing to file: %v\n", err)
 		return false, err
 	}
-	readers.UserStore = readers.FReaderUser(config.USER_FILE, os.O_RDONLY|os.O_CREATE)
+	readers.SyncUserData()
 	return true, nil
 }

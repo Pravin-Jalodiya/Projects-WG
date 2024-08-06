@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"projects/config"
 	"projects/models"
 )
 
@@ -15,7 +14,7 @@ var (
 )
 
 func init() {
-	UserStore = FReaderUser(config.USER_FILE, os.O_RDONLY|os.O_CREATE)
+	SyncUserData()
 	for _, v := range UserStore {
 		UserMap[v.Username] = v.Password
 	}

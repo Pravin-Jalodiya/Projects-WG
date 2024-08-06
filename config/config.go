@@ -10,4 +10,5 @@ const (
 	GPT_MODEL     = "gpt-4"
 	COURSE_FIRST  = 1
 	COURSE_LAST   = 3
+	STR_DECOR     = "----------------"
 )

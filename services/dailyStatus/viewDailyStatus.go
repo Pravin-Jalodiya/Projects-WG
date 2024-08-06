@@ -2,11 +2,12 @@ package dailyStatus
 
 import (
 	"fmt"
+	"projects/config"
 	"projects/utils/readers"
 )
 
 func viewDailyStatus(currentUser string) {
-	fmt.Println("----------------Your dailyStatus status----------------")
+	fmt.Println(config.STR_DECOR, "DAILY STATUS", config.STR_DECOR)
 	for _, v := range readers.UserStore {
 		if v.Username == currentUser {
 			for _, v := range v.DailyStatus {

@@ -7,7 +7,9 @@ import (
 )
 
 func UpdateStatus(currentUser string, completedModules []models.Module) {
-
+	if len(completedModules) == 0 {
+		return
+	}
 	dateTime := time2.Now()
 	dailyStatusUpdate := models.DailyStatus{
 		Date:            dateTime.Format("2006-01-02"),

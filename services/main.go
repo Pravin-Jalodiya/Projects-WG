@@ -2,7 +2,9 @@ package services
 
 import (
 	"fmt"
+	"projects/config"
 	"projects/middleware"
+	"projects/services/course"
 	"projects/services/dailyStatus"
 	"projects/services/todo"
 )
@@ -10,7 +12,7 @@ import (
 func Main() {
 	var choice int
 	for {
-		fmt.Printf("\n-----------------WELCOME TO INTERNS PORTAL-----------------\n\nPlease select an option\n1. Register for courses\n2. Manage ToDo list\n3. Daily Status\n4. Log out\n")
+		fmt.Printf("\n%sWELCOME TO INTERNS PORTAL%s\n\nPlease select an option\n1. Register for courses\n2. Manage ToDo list\n3. Daily Status\n4. Log out\n", config.STR_DECOR, config.STR_DECOR)
 		_, err := fmt.Scanln(&choice)
 		if err != nil {
 			fmt.Println("Invalid input:", err)
@@ -19,6 +21,7 @@ func Main() {
 
 		switch choice {
 		case 1:
+			course.Registeration(middleware.ActiveUser)
 
 		case 2:
 			todo.Main(middleware.ActiveUser)

@@ -2,15 +2,16 @@ package dailyStatus
 
 import (
 	"fmt"
+	"projects/config"
 )
 
 func Main(currentUser string) {
 	var choice int
 	for {
-		fmt.Printf("\n-----------------TODO LIST-----------------\n\nPlease select an option\n1. View dailyStatus status\n2. Go back\n")
+		fmt.Printf("\n%sDAILY STATUS%s\n\nPlease select an option\n1. View daily status\n2. Go back\n", config.STR_DECOR, config.STR_DECOR)
 		_, err := fmt.Scanln(&choice)
 		if err != nil {
-			fmt.Println("Invalid input:", err)
+			fmt.Println("Invalid input")
 			continue
 		}
 

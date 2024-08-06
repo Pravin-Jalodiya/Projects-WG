@@ -9,7 +9,6 @@ import (
 	"projects/config"
 	"projects/models"
 	age2 "projects/utils/age"
-	"projects/utils/course"
 	password2 "projects/utils/password"
 	user2 "projects/utils/user"
 	"projects/utils/writers"
@@ -141,36 +140,7 @@ func SignUp() {
 		return
 	}
 
-	course.View()
-	courseChoice := make([]int, 0)
-	for {
-		fmt.Print("Enter CID of course you want to enroll in (put 0 to exit) : ")
-		cidString, err := reader.ReadString('\n')
-		cidString = strings.TrimSuffix(cidString, "\n")
-		cidString = strings.TrimSpace(cidString)
-		if err != nil {
-			fmt.Println("Error reading age.")
-			return
-		} else {
-			cid, err := strconv.Atoi(cidString)
-			if err != nil {
-				fmt.Println("Not a number")
-				continue
-			} else {
-				if cid >= config.COURSE_FIRST && cid <= config.COURSE_LAST {
-					courseChoice = append(courseChoice, cid)
-				} else if cid == 0 {
-					break
-				} else {
-					fmt.Println("Invalid CID")
-				}
-			}
-		}
-	}
-
-	userCourses := course.Get(courseChoice...)
-
-	newUser := models.UserData{Username: username, Password: hashedPassword, ToDo: userCourses}
+	newUser := models.UserData{Username: username, Password: hashedPassword}
 
 	ok, err := writers.FWriterUser(config.USER_FILE, newUser)
 	if ok {

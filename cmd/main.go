@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"os"
+	"projects/config"
 	"projects/controllers"
 )
 
 func main() {
 	var choice int
 	for {
-		fmt.Printf("\n-----------------Batch 4 Management System-----------------\n\nPlease select an option\n1. Sign Up\n2. Log In\n3. Exit\n")
+		fmt.Printf("\n%sBatch 4 Management System%s\n\nPlease select an option\n1. Sign Up\n2. Log In\n3. Exit\n", config.STR_DECOR, config.STR_DECOR)
 		_, err := fmt.Scanln(&choice)
 		if err != nil {
 			fmt.Println("Invalid input:", err)
