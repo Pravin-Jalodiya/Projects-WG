@@ -27,7 +27,7 @@ func isCIDRepeated(cid int, currentUser string) bool {
 	return false
 }
 
-func Registration(currentUser string) {
+func registration(currentUser string) {
 
 	course.View()
 
@@ -43,7 +43,7 @@ func Registration(currentUser string) {
 		} else {
 			cid, err := strconv.Atoi(cidString)
 			if err != nil {
-				fmt.Println("Not a number")
+				fmt.Println("Invalid Number")
 				continue
 			} else {
 				if cid >= config.COURSE_FIRST && cid <= config.COURSE_LAST {

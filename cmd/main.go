@@ -10,7 +10,7 @@ import (
 func main() {
 	var choice int
 	red := color.New(color.FgRed).SprintFunc()
-	green := color.New(color.FgGreen).SprintFunc()
+
 	blue := color.New(color.FgBlue).SprintFunc()
 	cyan := color.New(color.FgCyan).SprintFunc()
 
@@ -18,7 +18,6 @@ func main() {
 	loginEmoji := "🔑"
 	exitEmoji := "🚪"
 	errorEmoji := "❌"
-	successEmoji := "✅"
 
 	for {
 		fmt.Printf("\n%s%sBATCH 4 MANAGEMENT SYSTEM%s%s\n\n%sPlease select an option:\n1. %s Sign Up\n2. %s Log In\n3. %s Exit\n",
@@ -34,11 +33,9 @@ func main() {
 		switch choice {
 		case 1:
 			controllers.SignUp()
-			fmt.Println(green(successEmoji), green("Sign Up successful!"))
 
 		case 2:
 			controllers.Login()
-			fmt.Println(green(successEmoji), green("Log In successful!"))
 
 		case 3:
 			fmt.Println(blue(exitEmoji), blue("Exiting..."))

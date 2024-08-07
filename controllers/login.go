@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"golang.org/x/term"
 	"projects/middleware"
 	"projects/services"
@@ -12,6 +13,9 @@ import (
 )
 
 func Login() {
+
+	successEmoji := "✅"
+	green := color.New(color.FgGreen).SprintFunc()
 
 	fmt.Print("Enter your username: ")
 	user, err2 := reader.ReadString('\n')
@@ -38,7 +42,7 @@ func Login() {
 
 	if storedHash, exists := readers.UserMap[username]; exists {
 		if password2.VerifyPassword(password, storedHash) {
-			fmt.Println("Login successful")
+			fmt.Println(green(successEmoji), green("Log In successful!"))
 			middleware.Auth(username)
 			services.Main()
 		} else {

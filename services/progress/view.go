@@ -2,32 +2,38 @@ package progress
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"projects/config"
 	"projects/utils/readers"
 )
 
 const (
-	courseIDWidth    = 10
-	courseTitleWidth = 20
-	progressWidth    = 10
-	moduleTitleWidth = 20
-	moduleIDWidth    = 5
-	statusWidth      = 5
+	moduleIDWidth = 5
+	statusWidth   = 5
+)
+
+// Define color functions
+var (
+	blue   = color.New(color.FgBlue).SprintFunc()
+	green  = color.New(color.FgGreen).SprintFunc()
+	yellow = color.New(color.FgYellow).SprintFunc()
+	cyan   = color.New(color.FgCyan).SprintFunc()
+	red    = color.New(color.FgRed).SprintFunc()
 )
 
 func View(currentUser string) {
-
 	for _, user := range readers.UserStore {
 		if user.Username == currentUser {
 			completedModules := user.Progress.ModulesFinished
 			if len(user.Progress.Courses) == 0 {
-				fmt.Println("Register to at least 1 course to check progress.")
+				fmt.Println(red("Register to at least 1 course to check progress."))
 				return
 			}
-			fmt.Println(config.STR_DECOR, "PROGRESS", config.STR_DECOR)
+			fmt.Println(blue(config.STR_DECOR), blue("PROGRESS"), blue(config.STR_DECOR))
 			for _, course := range user.Progress.Courses {
-				fmt.Printf("Course ID: %d\nCourse Title: %s\n", course.CID, course.Title)
-				fmt.Printf("Progress: %d%%\n\n", calculateProgress(currentUser, course.CID, completedModules))
+				fmt.Printf("%sCourse ID: %d\n", cyan(""), course.CID)
+				fmt.Printf("%sCourse Title: %s\n", cyan(""), course.Title)
+				fmt.Printf("%sProgress: %d%%\n\n", green(""), calculateProgress(currentUser, course.CID, completedModules))
 
 				longestTitle := 0
 				for _, module := range course.Modules {
@@ -36,7 +42,7 @@ func View(currentUser string) {
 					}
 				}
 
-				fmt.Printf("Module Title%*s\tModule ID%*s\tStatus%*s\n", longestTitle-len("Module Title")+4, "", moduleIDWidth, "", statusWidth, "")
+				fmt.Printf("%sModule Title%*s\tModule ID%*s\tStatus%*s\n", yellow(""), longestTitle-len("Module Title")+4, "", moduleIDWidth, "", statusWidth, "")
 				fmt.Println("---------------------------------------------------------")
 
 				for i, module := range course.Modules {
@@ -48,11 +54,9 @@ func View(currentUser string) {
 			break
 		}
 	}
-
 }
 
 func calculateProgress(user string, cid int, completedModule []float32) int {
-	//traverse each course and then check MIDs against common completed module slices
 	totalProgress := 0
 	for _, val := range readers.UserStore {
 		if val.Username == user {
@@ -72,9 +76,8 @@ func calculateProgress(user string, cid int, completedModule []float32) int {
 }
 
 func putEmoji(mid float32, completedModules []float32) string {
-
 	if isCompleted(mid, completedModules) {
-		return "✅"
+		return green("✅")
 	}
 	return ""
 }

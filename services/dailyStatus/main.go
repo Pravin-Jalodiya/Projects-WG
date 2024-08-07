@@ -2,16 +2,28 @@ package dailyStatus
 
 import (
 	"fmt"
-	"projects/config"
+	"github.com/fatih/color"
 )
 
 func Main(currentUser string) {
 	var choice int
+
+	red := color.New(color.FgRed).SprintFunc()
+	blue := color.New(color.FgBlue).SprintFunc()
+	cyan := color.New(color.FgCyan).SprintFunc()
+
+	viewEmoji := "👁️"
+	backEmoji := "↩️"
+	errorEmoji := "❌"
+
 	for {
-		fmt.Printf("\n%sDAILY STATUS%s\n\nPlease select an option\n1. View daily status\n2. Go back\n", config.STR_DECOR, config.STR_DECOR)
+		fmt.Printf("\n%s%sDAILY STATUS%s%s\n\n%sPlease select an option:\n1. %s View daily status\n2. %s Go back\n",
+			cyan("======"), cyan(" "), cyan("======"), cyan(" "),
+			blue(""), viewEmoji, backEmoji)
+
 		_, err := fmt.Scanln(&choice)
 		if err != nil {
-			fmt.Println("Invalid input")
+			fmt.Println(red(errorEmoji), red("Invalid input"))
 			continue
 		}
 
@@ -23,7 +35,7 @@ func Main(currentUser string) {
 			return
 
 		default:
-			fmt.Println("Invalid selection. Please try again.")
+			fmt.Println(red(errorEmoji), red("Invalid selection. Please try again."))
 		}
 	}
 }

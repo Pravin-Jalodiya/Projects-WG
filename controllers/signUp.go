@@ -3,6 +3,7 @@ package controllers
 import (
 	"bufio"
 	"fmt"
+	"github.com/fatih/color"
 	"golang.org/x/term"
 	"os"
 	"projects/LLM"
@@ -18,10 +19,12 @@ import (
 )
 
 var (
-	reader   = bufio.NewReader(os.Stdin)
-	age      int
-	username string
-	password string
+	reader       = bufio.NewReader(os.Stdin)
+	age          int
+	username     string
+	password     string
+	green        = color.New(color.FgGreen).SprintFunc()
+	successEmoji = "✅"
 )
 
 func SignUp() {
@@ -146,7 +149,7 @@ func SignUp() {
 
 	ok, err := writers.FWriterUser(config.USER_FILE, newUser)
 	if ok {
-		fmt.Println("Sign up successful!")
+		fmt.Println(green(successEmoji), green("Sign Up successful!"))
 	} else {
 		fmt.Println("Sign up failed : ", err)
 	}

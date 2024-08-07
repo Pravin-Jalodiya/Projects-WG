@@ -2,6 +2,7 @@ package course
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"projects/config"
 	"projects/models"
 	"projects/services/dailyStatus"
@@ -11,6 +12,8 @@ import (
 )
 
 func updateCourseProgress(currentUser string) {
+	blue := color.New(color.FgBlue).SprintFunc()
+
 	view(currentUser)
 	for _, user := range readers.UserStore {
 		if user.Username == currentUser {
@@ -24,8 +27,7 @@ func updateCourseProgress(currentUser string) {
 
 		}
 	}
-
-	fmt.Println(config.STR_DECOR, "UPDATE TODO AND PROGRESS", config.STR_DECOR)
+	fmt.Println(blue(config.STR_DECOR), blue("UPDATE COURSE PROGRESS"), blue(config.STR_DECOR))
 	fmt.Println()
 	fmt.Print("Enter MID of the module to be marked as done: ")
 	var MID float32

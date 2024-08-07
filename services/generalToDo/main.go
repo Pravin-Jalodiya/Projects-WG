@@ -2,16 +2,30 @@ package generalToDo
 
 import (
 	"fmt"
-	"projects/config"
+	"github.com/fatih/color"
 )
 
 func Main(currentUser string) {
 	var choice int
+
+	red := color.New(color.FgRed).SprintFunc()
+	blue := color.New(color.FgBlue).SprintFunc()
+	cyan := color.New(color.FgCyan).SprintFunc()
+
+	viewEmoji := "👁️"
+	addTaskEmoji := "➕"
+	deleteTaskEmoji := "🗑️"
+	backEmoji := "↩️"
+	errorEmoji := "❌"
+
 	for {
-		fmt.Printf("\n%sMANAGE TODO%s\n\nPlease select an option\n1. View ToDo list\n2. Add Task\n3. Delete Task\n4. Go back\n", config.STR_DECOR, config.STR_DECOR)
+		fmt.Printf("\n%s%sMANAGE TODO%s%s\n\n%sPlease select an option:\n1. %s View ToDo list\n2. %s Add Task\n3. %s Delete Task\n4. %s Go back\n",
+			cyan("======"), cyan(" "), cyan("======"), cyan(" "),
+			blue(""), viewEmoji, addTaskEmoji, deleteTaskEmoji, backEmoji)
+
 		_, err := fmt.Scanln(&choice)
 		if err != nil {
-			fmt.Println("Invalid input")
+			fmt.Println(red(errorEmoji), red("Invalid input"))
 			continue
 		}
 
@@ -29,7 +43,7 @@ func Main(currentUser string) {
 			return
 
 		default:
-			fmt.Println("Invalid selection. Please try again.")
+			fmt.Println(red(errorEmoji), red("Invalid selection. Please try again."))
 		}
 	}
 }
