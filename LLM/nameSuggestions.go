@@ -8,7 +8,6 @@ import (
 	"log"
 	"os"
 	"projects/config"
-	"projects/utils/math"
 )
 
 func init() {
@@ -24,12 +23,12 @@ const (
 	generalPrompt = "This request is automated please respond carefully or it might break the system. Only generate output in the specified format. Give answers to the best of your ability. "
 )
 
-func UsernameSuggestion() string {
+func UsernameSuggestion(name string) string {
 	apiKey := os.Getenv("OPENAI_API")
 	client := resty.New()
 
 	var (
-		usernamePrompt = fmt.Sprintf("Task: Generate five creative 1 word usernames and also use these digits %d in random fashion for username generation! Output format : 1. name1 \n2. name2 \n3. name3\n4. name4\n5. name5\n", math.RandomInt())
+		usernamePrompt = fmt.Sprintf("Task: You are given a name that is already registered and you have to suggest similar usernames to %s. Generate 5 similar yet unique usernames. Output format : 1. name1 \n2. name2 \n3. name3\n4. name4\n5. name5\n", name)
 	)
 
 	finalPrompt := generalPrompt + usernamePrompt

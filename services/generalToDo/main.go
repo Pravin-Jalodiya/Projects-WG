@@ -1,4 +1,4 @@
-package todo
+package generalToDo
 
 import (
 	"fmt"
@@ -8,21 +8,24 @@ import (
 func Main(currentUser string) {
 	var choice int
 	for {
-		fmt.Printf("\n%sTODO%s\n\nPlease select an option\n1. View ToDo list\n2. Update ToDo & Daily status\n3. Go back\n", config.STR_DECOR, config.STR_DECOR)
+		fmt.Printf("\n%sMANAGE TODO%s\n\nPlease select an option\n1. View ToDo list\n2. Add Task\n3. Delete Task\n4. Go back\n", config.STR_DECOR, config.STR_DECOR)
 		_, err := fmt.Scanln(&choice)
 		if err != nil {
-			fmt.Println("Invalid input:", err)
+			fmt.Println("Invalid input")
 			continue
 		}
 
 		switch choice {
 		case 1:
-			viewToDo(currentUser)
+			view(currentUser)
 
 		case 2:
-			updateProgress(currentUser)
+			addTask(currentUser)
 
 		case 3:
+			deleteTask(currentUser)
+
+		case 4:
 			return
 
 		default:

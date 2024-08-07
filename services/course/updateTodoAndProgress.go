@@ -1,16 +1,17 @@
-package todo
+package course
 
 import (
 	"fmt"
 	"projects/config"
 	"projects/models"
 	"projects/services/dailyStatus"
+	"projects/services/progress"
 	"projects/utils/readers"
 	"projects/utils/writers"
 )
 
-func updateProgress(currentUser string) {
-
+func updateCourseProgress(currentUser string) {
+	view(currentUser)
 	for _, user := range readers.UserStore {
 		if user.Username == currentUser {
 			for _, toDo := range user.ToDo {
@@ -24,13 +25,17 @@ func updateProgress(currentUser string) {
 		}
 	}
 
-	fmt.Println(config.STR_DECOR, "UPDATE PROGRESS", config.STR_DECOR)
+	fmt.Println(config.STR_DECOR, "UPDATE TODO AND PROGRESS", config.STR_DECOR)
 	fmt.Println()
 	fmt.Print("Enter MID of the module to be marked as done: ")
 	var MID float32
 
 	for {
-		fmt.Scan(&MID)
+		_, scan := fmt.Scan(&MID)
+		if scan != nil {
+			fmt.Println("Invalid input. Try again.")
+			continue
+		}
 		fmt.Println()
 		var isValid = false
 		for _, user := range readers.UserStore {
@@ -76,7 +81,8 @@ func updateProgress(currentUser string) {
 	}
 
 	if len(completedModules) > 0 {
-		dailyStatus.UpdateStatus(currentUser, completedModules)
+		dailyStatus.Update(currentUser, completedModules)
+		progress.Update(currentUser, completedModules)
 		fmt.Printf("Module %.1f marked as done\nDaily status updated\n", MID)
 		_, err := writers.FWriterToDo(config.USER_FILE, readers.UserStore)
 		if err != nil {

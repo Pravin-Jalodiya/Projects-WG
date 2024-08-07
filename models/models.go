@@ -1,16 +1,25 @@
 package models
 
+import "time"
+
 type UserData struct {
 	Username    string
 	Password    string
 	ToDo        []Course
 	DailyStatus []DailyStatus
-	Progress    []UserProgress
+	Progress    UserProgress
+	GeneralTodo []DoList
+}
+
+type DoList struct {
+	Task     string
+	Deadline time.Time
 }
 
 type Module struct {
-	MID   float32
-	Title string
+	MID       float32
+	Title     string
+	Weightage int
 }
 
 type Course struct {
@@ -20,8 +29,8 @@ type Course struct {
 }
 
 type UserProgress struct {
-	CID        int
-	Completion int
+	Courses         []Course
+	ModulesFinished []float32
 }
 
 type DailyStatus struct {

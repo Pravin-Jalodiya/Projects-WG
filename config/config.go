@@ -9,6 +9,6 @@ const (
 	VALID_AGE     = 12
 	GPT_MODEL     = "gpt-4"
 	COURSE_FIRST  = 1
-	COURSE_LAST   = 3
+	COURSE_LAST   = 5
 	STR_DECOR     = "----------------"
 )

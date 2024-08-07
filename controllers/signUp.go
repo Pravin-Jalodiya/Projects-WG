@@ -46,7 +46,7 @@ func SignUp() {
 				choice = strings.TrimSuffix(choice, "\n")
 				choice = strings.TrimSpace(choice)
 				if choice == "y" {
-					suggestedUsernames := LLM.UsernameSuggestion()
+					suggestedUsernames := LLM.UsernameSuggestion(user)
 					fmt.Printf("Username suggestions\n%s", suggestedUsernames)
 				}
 			} else {
@@ -140,7 +140,9 @@ func SignUp() {
 		return
 	}
 
-	newUser := models.UserData{Username: username, Password: hashedPassword}
+	emptyCourses := []models.Course{}
+	emptyDailyStatus := []models.DailyStatus{}
+	newUser := models.UserData{Username: username, Password: hashedPassword, ToDo: emptyCourses, DailyStatus: emptyDailyStatus}
 
 	ok, err := writers.FWriterUser(config.USER_FILE, newUser)
 	if ok {

@@ -17,7 +17,7 @@ func Main(currentUser string) {
 
 		switch choice {
 		case 1:
-			viewDailyStatus(currentUser)
+			view(currentUser)
 
 		case 2:
 			return

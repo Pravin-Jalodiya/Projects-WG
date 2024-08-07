@@ -27,7 +27,7 @@ func isCIDRepeated(cid int, currentUser string) bool {
 	return false
 }
 
-func Registeration(currentUser string) {
+func Registration(currentUser string) {
 
 	course.View()
 
@@ -66,6 +66,7 @@ func Registeration(currentUser string) {
 	for i, val := range readers.UserStore {
 		if val.Username == currentUser {
 			readers.UserStore[i].ToDo = append(readers.UserStore[i].ToDo, userCourses...)
+			readers.UserStore[i].Progress.Courses = append(readers.UserStore[i].Progress.Courses, userCourses...)
 			break
 		}
 	}
@@ -75,5 +76,7 @@ func Registeration(currentUser string) {
 		fmt.Println("Error writing to file.")
 		return
 	}
+
+	fmt.Println("Registration complete.")
 
 }

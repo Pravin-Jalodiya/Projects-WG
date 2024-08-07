@@ -6,7 +6,7 @@ import (
 	time2 "time"
 )
 
-func UpdateStatus(currentUser string, completedModules []models.Module) {
+func Update(currentUser string, completedModules []models.Module) {
 	if len(completedModules) == 0 {
 		return
 	}
