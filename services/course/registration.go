@@ -14,7 +14,7 @@ import (
 
 var reader = bufio.NewReader(os.Stdin)
 
-func isCIDRepeated(cid int, currentUser string) bool {
+func cidFound(cid int, currentUser string) bool {
 	for _, user := range readers.UserStore {
 		if user.Username == currentUser {
 			for _, toDo := range user.ToDo {
@@ -47,7 +47,7 @@ func registration(currentUser string) {
 				continue
 			} else {
 				if cid >= config.COURSE_FIRST && cid <= config.COURSE_LAST {
-					if !isCIDRepeated(cid, currentUser) {
+					if !cidFound(cid, currentUser) {
 						courseChoice = append(courseChoice, cid)
 					} else {
 						fmt.Println("You are already enrolled in this course.")

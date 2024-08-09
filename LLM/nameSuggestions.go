@@ -28,7 +28,7 @@ func UsernameSuggestion(name string) string {
 	client := resty.New()
 
 	var (
-		usernamePrompt = fmt.Sprintf("Task: You are given a name that is already registered and you have to suggest similar usernames to %s. Generate 5 similar yet unique usernames. Output format : 1. name1 \n2. name2 \n3. name3\n4. name4\n5. name5\n", name)
+		usernamePrompt = fmt.Sprintf("You are tasked with creating unique and interesting usernames based on a given name. Given the username %s, suggest three alternative usernames that would appeal to someone looking for something similar but distinctive. Output format : 1. name1 \n2. name2 \n3. name3\n", name)
 	)
 
 	finalPrompt := generalPrompt + usernamePrompt

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"projects/config"
 	"projects/models"
 	"projects/utils/readers"
 )
@@ -21,7 +22,7 @@ func FWriterUser(f string, newUser models.UserData) (bool, error) {
 		return false, err
 	}
 
-	err = os.WriteFile("users.json", jsonData, 0644)
+	err = os.WriteFile(config.USER_FILE, jsonData, 0644)
 	if err != nil {
 		log.Printf("Error writing to file: %v\n", err)
 		return false, err
