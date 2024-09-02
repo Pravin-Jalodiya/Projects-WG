@@ -19,9 +19,9 @@ func Main(currentUser string) {
 	errorEmoji := "❌"
 
 	for {
-		fmt.Printf("\n%s%sMANAGE TODO%s%s\n\n%sPlease select an option:\n1. %s View ToDo list\n2. %s Add Task\n3. %s Delete Task\n4. %s Go back\n",
+		fmt.Printf("\n%s%sMANAGE TODO%s%s\n\n%sPlease select an option:\n1. %s View ToDo list\n2. %s Add Task\n3. %s Delete Task\n4. %s Add Task via API\n5. %s Delete Task via API\n6. %s Go back\n",
 			cyan("======"), cyan(" "), cyan("======"), cyan(" "),
-			blue(""), viewEmoji, addTaskEmoji, deleteTaskEmoji, backEmoji)
+			blue(""), viewEmoji, addTaskEmoji, deleteTaskEmoji, addTaskEmoji, deleteTaskEmoji, backEmoji)
 
 		_, err := fmt.Scanln(&choice)
 		if err != nil {
@@ -40,6 +40,11 @@ func Main(currentUser string) {
 			deleteTask(currentUser)
 
 		case 4:
+			addTaskViaApi(currentUser)
+		case 5:
+			deleteTaskViaApi(currentUser)
+
+		case 6:
 			return
 
 		default:
