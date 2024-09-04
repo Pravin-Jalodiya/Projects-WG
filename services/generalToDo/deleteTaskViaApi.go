@@ -2,16 +2,23 @@ package generalToDo
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"projects/config"
+	"projects/utils/errs"
+	"projects/utils/logger"
 	"projects/utils/readers"
 	"projects/utils/writers"
+	"time"
 )
 
 func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		errr := errs.NewInvalidRequestMethodError()
+		logger.Logger.Errorw("Invalid request method",
+			"method", r.Method,
+			"url", r.URL.Path,
+			"time", time.Now())
+		errr.ToJSON(w)
 		return
 	}
 
@@ -22,7 +29,12 @@ func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		http.Error(w, "Error parsing request body", http.StatusBadRequest)
+		logger.Logger.Errorw("Error parsing request body",
+			"error", err,
+			"request", request,
+			"time", time.Now())
+		errr := errs.NewInvalidParameterError()
+		errr.ToJSON(w)
 		return
 	}
 
@@ -32,7 +44,12 @@ func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 		if user.Username == request.Username {
 			userExist = true
 			if len(user.GeneralTodo) == 0 || request.TaskNo <= 0 || request.TaskNo > len(user.GeneralTodo) {
-				http.Error(w, "Invalid task number", http.StatusBadRequest)
+				logger.Logger.Warnw("Invalid task number",
+					"task_no", request.TaskNo,
+					"total_tasks", len(user.GeneralTodo),
+					"time", time.Now())
+				errr := errs.NewInvalidParameterValueError()
+				errr.ToJSON(w)
 				return
 			}
 			readers.UserStore[i].GeneralTodo = append(readers.UserStore[i].GeneralTodo[:request.TaskNo-1], readers.UserStore[i].GeneralTodo[request.TaskNo:]...)
@@ -41,19 +58,35 @@ func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !userExist {
-		http.Error(w, "User does not exist", http.StatusBadRequest)
+		logger.Logger.Warnw("User not found",
+			"username", request.Username,
+			"time", time.Now())
+		errr := errs.NewNotFoundError()
+		errr.ToJSON(w)
 		return
 	}
 
 	_, err = writers.FWriterToDo(config.USER_FILE, readers.UserStore)
 	if err != nil {
-		http.Error(w, "Error writing to file", http.StatusInternalServerError)
+		logger.Logger.Errorw("Error writing to file",
+			"error", err,
+			"time", time.Now())
+		errr := errs.NewUnexpectedError()
+		errr.ToJSON(w)
 		return
 	}
 
+	logger.Logger.Infow("Task deleted successfully",
+		"username", request.Username,
+		"task_no", request.TaskNo,
+		"time", time.Now())
+
 	w.WriteHeader(http.StatusOK)
-	_, err = fmt.Fprintln(w, "Task deleted successfully.")
+	_, err = w.Write([]byte("Task deleted successfully."))
 	if err != nil {
+		logger.Logger.Errorw("Error writing response",
+			"error", err,
+			"time", time.Now())
 		return
 	}
 }

@@ -60,7 +60,7 @@ func deleteTaskViaApi(currentUser string) {
 		return
 	}
 
-	req, err := http.NewRequest("DELETE", "http://localhost:8080/api/delete-task", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("DELETE", "http://localhost:8080/api/todo", bytes.NewBuffer(requestBody))
 	if err != nil {
 		fmt.Println("Error creating request:", err)
 		return

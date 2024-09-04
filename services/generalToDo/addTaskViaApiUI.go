@@ -70,7 +70,7 @@ func addTaskViaApi(currentUser string) {
 		return
 	}
 
-	resp, err := http.Post("http://localhost:8080/api/add-task", "application/json", bytes.NewBuffer(requestBody))
+	resp, err := http.Post("http://localhost:8080/api/todo", "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
 		fmt.Println("Error sending request:", err)
 		return

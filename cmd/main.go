@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/fatih/color"
-	"log"
+	"github.com/gorilla/mux"
 	"net/http"
 	"os"
 	"projects/controllers"
@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+
 	var choice int
 	red := color.New(color.FgRed).SprintFunc()
 	blue := color.New(color.FgBlue).SprintFunc()
@@ -21,13 +22,16 @@ func main() {
 	exitEmoji := "🚪"
 	errorEmoji := "❌"
 
-	// Start the API server in a goroutine
 	go func() {
-		http.HandleFunc("/api/add-task", generalToDo.AddTaskHandler)
-		http.HandleFunc("/api/delete-task", generalToDo.DeleteTaskHandler)
-		log.Println("Starting API server on :8080")
-		if err := http.ListenAndServe(":8080", nil); err != nil {
-			log.Fatalf("Could not start server: %s\n", err.Error())
+		r := mux.NewRouter()
+
+		r.HandleFunc("/api/todo", generalToDo.AddTaskHandler).Methods(http.MethodPost)
+		r.HandleFunc("/api/todo", generalToDo.DeleteTaskHandler).Methods(http.MethodDelete)
+
+		http.Handle("/", r)
+		err := http.ListenAndServe(":8080", nil)
+		if err != nil {
+			return
 		}
 	}()
 
