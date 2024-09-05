@@ -14,13 +14,12 @@ import (
 )
 
 func AddTaskHandler(w http.ResponseWriter, r *http.Request) {
-
 	// Get the username from the URL path variable
 	username := r.URL.Path[len("/api/todo/update/"):]
 	if username == "" {
-		logger.Logger.Warnw("Username not provided",
+		logger.Logger.Warnw("Username not provided in the request URL",
 			"time", time.Now())
-		errr := errs.NewInvalidParameterError()
+		errr := errs.NewInvalidParameterError("Username parameter is missing")
 		errr.ToJSON(w)
 		return
 	}
@@ -31,12 +30,21 @@ func AddTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err := json.NewDecoder(r.Body).Decode(&request)
-	if err != nil || strings.TrimSpace(request.Task) == "" || request.LastDay <= 0 {
-		logger.Logger.Errorw("Error decoding request body or invalid parameters",
+	if err != nil {
+		logger.Logger.Errorw("Error decoding request body",
 			"error", err,
-			"request", request,
 			"time", time.Now())
-		errr := errs.NewInvalidParameterValueError()
+		errr := errs.NewInvalidParameterError("Failed to decode JSON body")
+		errr.ToJSON(w)
+		return
+	}
+
+	if strings.TrimSpace(request.Task) == "" || request.LastDay <= 0 {
+		logger.Logger.Warnw("Invalid task or last_day parameter",
+			"task", request.Task,
+			"last_day", request.LastDay,
+			"time", time.Now())
+		errr := errs.NewInvalidParameterValueError("Task cannot be empty and last_day must be a positive integer")
 		errr.ToJSON(w)
 		return
 	}
@@ -56,20 +64,20 @@ func AddTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !userExist {
-		logger.Logger.Warnw("User not found",
+		logger.Logger.Warnw("User not found in UserStore",
 			"username", username,
 			"time", time.Now())
-		errr := errs.NewNotFoundError()
+		errr := errs.NewNotFoundError("User with the given username does not exist")
 		errr.ToJSON(w)
 		return
 	}
 
 	_, err = writers.FWriterToDo(config.USER_FILE, readers.UserStore)
 	if err != nil {
-		logger.Logger.Errorw("Error writing to file",
+		logger.Logger.Errorw("Error writing updated user data to file",
 			"error", err,
 			"time", time.Now())
-		errr := errs.NewUnexpectedError()
+		errr := errs.NewUnexpectedError("Failed to write updated todo list to file")
 		errr.ToJSON(w)
 		return
 	}
@@ -85,7 +93,7 @@ func AddTaskHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	_, err = w.Write([]byte("Task added successfully."))
 	if err != nil {
-		logger.Logger.Errorw("Error writing response",
+		logger.Logger.Errorw("Error writing success response",
 			"error", err,
 			"time", time.Now())
 		return

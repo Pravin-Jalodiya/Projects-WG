@@ -48,3 +48,12 @@
 {"level":"INFO","time":"2024-09-05T22:26:06+05:30","msg":"Task added successfully","username":"aditya","task":"sleep","deadline":"2024-09-06T22:26:06+05:30","time":"2024-09-05T22:26:06+05:30"}
 {"level":"INFO","time":"2024-09-05T22:26:10+05:30","msg":"Task deleted successfully","username":"aditya","task_no":1,"time":"2024-09-05T22:26:10+05:30"}
 {"level":"INFO","time":"2024-09-05T22:26:10+05:30","msg":"Task deleted successfully","username":"aditya","task_no":1,"time":"2024-09-05T22:26:10+05:30"}
+{"level":"WARN","time":"2024-09-05T22:52:51+05:30","msg":"Authentication failed: Incorrect password","username":"aditya","time":"2024-09-05T22:52:51+05:30"}
+{"level":"WARN","time":"2024-09-05T22:53:27+05:30","msg":"Invalid 'limit' query parameter","limit":"-1","username":"aditya","error":null,"time":"2024-09-05T22:53:27+05:30"}
+{"level":"WARN","time":"2024-09-05T22:53:43+05:30","msg":"User not found in UserStore","username":"adity","time":"2024-09-05T22:53:43+05:30"}
+{"level":"WARN","time":"2024-09-05T22:56:09+05:30","msg":"User not found in UserStore","username":"adity","time":"2024-09-05T22:56:09+05:30"}
+{"level":"INFO","time":"2024-09-05T22:56:28+05:30","msg":"Task added successfully","username":"aditya","task":"sleep","deadline":"2024-09-06T22:56:28+05:30","time":"2024-09-05T22:56:28+05:30"}
+{"level":"INFO","time":"2024-09-05T22:56:48+05:30","msg":"Task deleted successfully","username":"aditya","task_no":1,"time":"2024-09-05T22:56:48+05:30"}
+{"level":"ERROR","time":"2024-09-05T23:03:37+05:30","msg":"Token parsing error","error":"signature is invalid","time":"2024-09-05T23:03:37+05:30"}
+{"level":"ERROR","time":"2024-09-05T23:03:40+05:30","msg":"Token parsing error","error":"signature is invalid","time":"2024-09-05T23:03:40+05:30"}
+{"level":"INFO","time":"2024-09-05T23:03:47+05:30","msg":"Task added successfully","username":"aditya","task":"wakeup","deadline":"2024-09-06T23:03:47+05:30","time":"2024-09-05T23:03:47+05:30"}

@@ -20,10 +20,10 @@ func ViewTaskHandler(w http.ResponseWriter, r *http.Request) {
 	username := vars["username"]
 
 	if strings.TrimSpace(username) == "" {
-		logger.Logger.Errorw("Missing username parameter",
+		logger.Logger.Errorw("Missing or empty username parameter",
 			"username", username,
 			"time", time.Now())
-		err := errs.NewInvalidParameterValueError()
+		err := errs.NewInvalidParameterValueError("Username parameter cannot be empty")
 		err.ToJSON(w)
 		return
 	}
@@ -39,17 +39,17 @@ func ViewTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if user == nil {
-		logger.Logger.Warnw("User not found",
+		logger.Logger.Warnw("User not found in UserStore",
 			"username", username,
 			"time", time.Now())
-		err := errs.NewNotFoundError()
+		err := errs.NewNotFoundError("No user found with the provided username")
 		err.ToJSON(w)
 		return
 	}
 
 	// If no tasks are found for the user
 	if len(user.GeneralTodo) == 0 {
-		logger.Logger.Infow("No todo tasks found for the user",
+		logger.Logger.Infow("User's ToDo list is empty",
 			"username", username,
 			"time", time.Now())
 		w.WriteHeader(http.StatusOK)
@@ -68,9 +68,10 @@ func ViewTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if limitParam != "" {
 		parsedLimit, err := strconv.Atoi(limitParam)
 		if err != nil || parsedLimit <= 0 {
-			logger.Logger.Warnw("Invalid limit parameter",
+			logger.Logger.Warnw("Invalid 'limit' query parameter",
 				"limit", limitParam,
 				"username", username,
+				"error", err,
 				"time", time.Now())
 			w.WriteHeader(http.StatusBadRequest)
 			_, _ = w.Write([]byte("Invalid 'limit' parameter. It must be a positive integer."))
@@ -85,7 +86,7 @@ func ViewTaskHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(user.GeneralTodo[:limit])
 	if err != nil {
-		logger.Logger.Errorw("Error encoding todo list to JSON",
+		logger.Logger.Errorw("Error encoding ToDo list to JSON",
 			"error", err,
 			"time", time.Now())
 		w.WriteHeader(http.StatusInternalServerError)

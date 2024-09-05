@@ -29,7 +29,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		logger.Logger.Errorw("Error decoding request body",
 			"error", err,
 			"time", time.Now())
-		errr := errs.NewInvalidParameterError()
+		errr := errs.NewInvalidParameterError("Invalid request body format")
 		errr.ToJSON(w)
 		return
 	}
@@ -37,20 +37,20 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	// Find the user by username
 	user := findUserByUsername(request.Username)
 	if user == nil {
-		logger.Logger.Warnw("Invalid credentials",
+		logger.Logger.Warnw("Authentication failed: User not found",
 			"username", request.Username,
 			"time", time.Now())
-		errr := errs.NewUnauthorizedError()
+		errr := errs.NewUnauthorizedError("Invalid username or password")
 		errr.ToJSON(w)
 		return
 	}
 
 	// Verify password
 	if !password.VerifyPassword(request.Password, user.Password) {
-		logger.Logger.Warnw("Invalid credentials",
+		logger.Logger.Warnw("Authentication failed: Incorrect password",
 			"username", request.Username,
 			"time", time.Now())
-		errr := errs.NewUnauthorizedError()
+		errr := errs.NewUnauthorizedError("Invalid username or password")
 		errr.ToJSON(w)
 		return
 	}
@@ -59,16 +59,16 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &Claims{
 		Username: request.Username,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(60 * time.Second).Unix(), // Token expires in 30 seconds
+			ExpiresAt: time.Now().Add(60 * time.Second).Unix(), // Token expires in 60 seconds
 		},
 	})
 
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
-		logger.Logger.Errorw("Error generating token",
+		logger.Logger.Errorw("Error generating JWT token",
 			"error", err,
 			"time", time.Now())
-		errr := errs.NewUnexpectedError()
+		errr := errs.NewUnexpectedError("Failed to generate authentication token")
 		errr.ToJSON(w)
 		return
 	}
@@ -82,7 +82,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			"error", err,
 			"time", time.Now())
 		w.WriteHeader(http.StatusInternalServerError)
-		_, _ = w.Write([]byte("Failed to generate token."))
+		_, _ = w.Write([]byte("Failed to generate token response"))
 	}
 }
 

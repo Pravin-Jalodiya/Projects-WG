@@ -2,12 +2,17 @@ package middleware
 
 import (
 	"context"
-	"github.com/dgrijalva/jwt-go"
+	"errors"
 	"net/http"
 	"strings"
+	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"projects/utils/errs"
+	"projects/utils/logger"
 )
 
-var secretKey = []byte("your_secret_key") // Change this to a secure key
+var secretKey = []byte("Xwdwq0a1da3sqe20awas0e-qwe0dq0wd032-qd0da0sdas02-ascas0cas0f")
 
 // Claims JWT claims structure
 type Claims struct {
@@ -20,7 +25,8 @@ func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString := extractToken(r)
 		if tokenString == "" {
-			http.Error(w, "Authorization token required", http.StatusUnauthorized)
+			err := errs.NewUnauthorizedError("Authorization token required")
+			err.ToJSON(w)
 			return
 		}
 
@@ -28,14 +34,26 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return secretKey, nil
 		})
 
-		if err != nil || !token.Valid {
-			http.Error(w, "Invalid or expired token", http.StatusUnauthorized)
+		if err != nil {
+			logger.Logger.Errorw("Token parsing error",
+				"error", err,
+				"time", time.Now())
+			errMsg := "Invalid token"
+			var ve *jwt.ValidationError
+			if errors.As(err, &ve) {
+				if ve.Errors&jwt.ValidationErrorExpired != 0 {
+					errMsg = "Token has expired"
+				}
+			}
+			err := errs.NewUnauthorizedError(errMsg)
+			err.ToJSON(w)
 			return
 		}
 
 		claims, ok := token.Claims.(*Claims)
-		if !ok {
-			http.Error(w, "Invalid token claims", http.StatusUnauthorized)
+		if !ok || !token.Valid {
+			err := errs.NewUnauthorizedError("Invalid token claims")
+			err.ToJSON(w)
 			return
 		}
 
