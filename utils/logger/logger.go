@@ -39,10 +39,19 @@ func init() {
 		panic(err)
 	}
 
+	// Define level enablers
+	consoleLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+		return lvl == zapcore.InfoLevel // Console shows Warn and above
+	})
+
+	fileLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+		return lvl >= zapcore.ErrorLevel // File shows Error and above
+	})
+
 	// Set up the core for both console and file logging
 	core := zapcore.NewTee(
-		zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), zapcore.DebugLevel),
-		zapcore.NewCore(fileEncoder, zapcore.AddSync(logFile), zapcore.DebugLevel),
+		zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), consoleLevel),
+		zapcore.NewCore(fileEncoder, zapcore.AddSync(logFile), fileLevel),
 	)
 
 	logger := zap.New(core, zap.AddCallerSkip(1), zap.AddCallerSkip(1))

@@ -57,3 +57,9 @@
 {"level":"ERROR","time":"2024-09-05T23:03:37+05:30","msg":"Token parsing error","error":"signature is invalid","time":"2024-09-05T23:03:37+05:30"}
 {"level":"ERROR","time":"2024-09-05T23:03:40+05:30","msg":"Token parsing error","error":"signature is invalid","time":"2024-09-05T23:03:40+05:30"}
 {"level":"INFO","time":"2024-09-05T23:03:47+05:30","msg":"Task added successfully","username":"aditya","task":"wakeup","deadline":"2024-09-06T23:03:47+05:30","time":"2024-09-05T23:03:47+05:30"}
+{"level":"ERROR","time":"2024-09-05T23:09:57+05:30","msg":"Token parsing error","error":"token is expired by 5m54s","time":"2024-09-05T23:09:57+05:30"}
+{"level":"ERROR","time":"2024-09-05T23:11:25+05:30","msg":"Token parsing error","error":"signature is invalid","time":"2024-09-05T23:11:25+05:30"}
+{"level":"ERROR","time":"2024-09-05T23:11:27+05:30","msg":"Token parsing error","error":"signature is invalid","time":"2024-09-05T23:11:27+05:30"}
+{"level":"ERROR","time":"2024-09-05T23:14:35+05:30","msg":"Token parsing error","error":"token is expired by 1m45s","time":"2024-09-05T23:14:35+05:30"}
+{"level":"ERROR","time":"2024-09-05T23:14:55+05:30","msg":"Token parsing error","error":"token is expired by 2m5s","time":"2024-09-05T23:14:55+05:30"}
+{"level":"ERROR","time":"2024-09-05T23:15:03+05:30","msg":"Token parsing error","error":"token is expired by 2m13s","time":"2024-09-05T23:15:03+05:30"}
