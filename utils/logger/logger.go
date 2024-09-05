@@ -45,12 +45,6 @@ func init() {
 		zapcore.NewCore(fileEncoder, zapcore.AddSync(logFile), zapcore.DebugLevel),
 	)
 
-	// Build the logger with core and options
-	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
+	logger := zap.New(core, zap.AddCallerSkip(1), zap.AddCallerSkip(1))
 	Logger = logger.Sugar()
-}
-
-// Sync flushes any buffered log entries
-func Sync() {
-	_ = Logger.Sync()
 }

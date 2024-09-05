@@ -5,3 +5,13 @@
 {"level":"ERROR","time":"2024-09-04T07:58:07+05:30","caller":"http/server.go:2171","msg":"Error parsing request body","error":"invalid character '}' looking for beginning of object key string","request":{"username":"","task_no":0},"time":"2024-09-04T07:58:07+05:30"}
 {"level":"ERROR","time":"2024-09-04T07:58:15+05:30","caller":"http/server.go:2171","msg":"Error parsing request body","error":"invalid character '}' looking for beginning of object key string","request":{"username":"","task_no":0},"time":"2024-09-04T07:58:15+05:30"}
 {"level":"WARN","time":"2024-09-04T07:58:21+05:30","caller":"http/server.go:2171","msg":"Invalid task number","task_no":0,"total_tasks":5,"time":"2024-09-04T07:58:21+05:30"}
+{"level":"INFO","time":"2024-09-05T10:46:51+05:30","msg":"Task added successfully","username":"aditya","task":"postman","deadline":"2024-09-12T10:46:51+05:30","time":"2024-09-05T10:46:51+05:30"}
+{"level":"INFO","time":"2024-09-05T10:50:08+05:30","msg":"Task added successfully","username":"aditya","task":"postman course","deadline":"2024-09-13T10:50:08+05:30","time":"2024-09-05T10:50:08+05:30"}
+{"level":"WARN","time":"2024-09-05T10:50:18+05:30","msg":"Invalid task number","task_no":0,"total_tasks":7,"time":"2024-09-05T10:50:18+05:30"}
+{"level":"INFO","time":"2024-09-05T10:50:50+05:30","msg":"Task deleted successfully","username":"aditya","task_no":2,"time":"2024-09-05T10:50:50+05:30"}
+{"level":"WARN","time":"2024-09-05T10:51:58+05:30","msg":"User not found","username":"","time":"2024-09-05T10:51:58+05:30"}
+{"level":"WARN","time":"2024-09-05T11:10:13+05:30","msg":"User not found","username":"","time":"2024-09-05T11:10:13+05:30"}
+{"level":"INFO","time":"2024-09-05T11:14:02+05:30","msg":"Task deleted successfully","username":"aditya","task_no":1,"time":"2024-09-05T11:14:02+05:30"}
+{"level":"WARN","time":"2024-09-05T11:14:09+05:30","msg":"Invalid task number","task_no":-1,"total_tasks":5,"time":"2024-09-05T11:14:09+05:30"}
+{"level":"WARN","time":"2024-09-05T12:20:58+05:30","msg":"Invalid task number","task_no":-1,"total_tasks":5,"time":"2024-09-05T12:20:58+05:30"}
+{"level":"INFO","time":"2024-09-05T12:21:07+05:30","msg":"Task deleted successfully","username":"aditya","task_no":1,"time":"2024-09-05T12:21:07+05:30"}

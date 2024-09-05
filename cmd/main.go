@@ -24,9 +24,9 @@ func main() {
 
 	go func() {
 		r := mux.NewRouter()
-
-		r.HandleFunc("/api/todo", generalToDo.AddTaskHandler).Methods(http.MethodPost)
-		r.HandleFunc("/api/todo", generalToDo.DeleteTaskHandler).Methods(http.MethodDelete)
+		r.HandleFunc("api/todo/{username}", generalToDo.ViewTaskHandler).Methods(http.MethodGet)
+		r.HandleFunc("/api/todo/update", generalToDo.AddTaskHandler).Methods(http.MethodPost)
+		r.HandleFunc("/api/todo/update/{username}", generalToDo.DeleteTaskHandler).Methods(http.MethodDelete)
 
 		http.Handle("/", r)
 		err := http.ListenAndServe(":8080", nil)

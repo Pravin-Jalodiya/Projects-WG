@@ -1,8 +1,6 @@
 package generalToDo
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"projects/config"
@@ -51,16 +49,9 @@ func deleteTaskViaApi(currentUser string) {
 		break
 	}
 
-	requestBody, err := json.Marshal(map[string]interface{}{
-		"username": username,
-		"task_no":  taskNo,
-	})
-	if err != nil {
-		fmt.Println("Error creating request:", err)
-		return
-	}
+	url := fmt.Sprintf("http://localhost:8080/api/todo/update/%s?task_no=%d", username, taskNo)
 
-	req, err := http.NewRequest("DELETE", "http://localhost:8080/api/todo", bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("DELETE", url, nil) // No request body needed
 	if err != nil {
 		fmt.Println("Error creating request:", err)
 		return
