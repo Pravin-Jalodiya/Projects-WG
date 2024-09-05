@@ -3,6 +3,7 @@ module projects
 go 1.22.5
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/color v1.17.0
 	github.com/go-resty/resty/v2 v2.13.1
 	github.com/gorilla/mux v1.8.1

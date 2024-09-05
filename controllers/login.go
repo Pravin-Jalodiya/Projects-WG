@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/fatih/color"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 	"projects/middleware"
 	"projects/services"
 	password2 "projects/utils/password"
@@ -30,7 +30,7 @@ func Login() {
 	}
 
 	fmt.Print("Enter your password: ")
-	secret, err := terminal.ReadPassword(int(syscall.Stdin))
+	secret, err := term.ReadPassword(syscall.Stdin)
 	if err != nil {
 		fmt.Println("Error reading input.")
 		return

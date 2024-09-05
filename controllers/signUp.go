@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/fatih/color"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 	"os"
 	"projects/LLM"
 	"projects/config"
@@ -61,7 +61,7 @@ func SignUp() {
 
 	for {
 		fmt.Print("Enter your password: ")
-		secret1, err := terminal.ReadPassword(int(syscall.Stdin))
+		secret1, err := term.ReadPassword(syscall.Stdin)
 		fmt.Println()
 		pass1 := string(secret1)
 		pass1 = strings.TrimSpace(pass1)
@@ -92,7 +92,7 @@ func SignUp() {
 				}
 			} else {
 				fmt.Print("Enter your password again: ")
-				secret2, err := terminal.ReadPassword(int(syscall.Stdin))
+				secret2, err := term.ReadPassword(syscall.Stdin)
 				fmt.Println()
 				if err != nil {
 					fmt.Println("Error reading input.")

@@ -6,42 +6,55 @@ import (
 )
 
 type AppError struct {
-	Code    int    `json:"-"`
+	Code    int    `json:"status_code,omitempty"`
 	Message string `json:"message"`
 }
 
-func NewNotFoundError() *AppError {
+// NewNotFoundError creates an error with a custom message
+func NewNotFoundError(message string) *AppError {
 	return &AppError{
 		Code:    http.StatusNotFound,
-		Message: "user not found",
+		Message: message,
 	}
 }
 
-func NewUnexpectedError() *AppError {
+// NewUnexpectedError creates an error with a custom message
+func NewUnexpectedError(message string) *AppError {
 	return &AppError{
 		Code:    http.StatusInternalServerError,
-		Message: "unexpected error",
+		Message: message,
 	}
 }
 
-func NewInvalidParameterError() *AppError {
+// NewInvalidParameterError creates an error with a custom message
+func NewInvalidParameterError(message string) *AppError {
 	return &AppError{
 		Code:    http.StatusBadRequest,
-		Message: "invalid parameters",
+		Message: message,
 	}
 }
 
-func NewInvalidParameterValueError() *AppError {
+// NewInvalidParameterValueError creates an error with a custom message
+func NewInvalidParameterValueError(message string) *AppError {
 	return &AppError{
 		Code:    http.StatusBadRequest,
-		Message: "invalid parameter value",
+		Message: message,
 	}
 }
 
-func NewInvalidRequestMethodError() *AppError {
+// NewInvalidRequestMethodError creates an error with a custom message
+func NewInvalidRequestMethodError(message string) *AppError {
 	return &AppError{
 		Code:    http.StatusMethodNotAllowed,
-		Message: "invalid request method",
+		Message: message,
+	}
+}
+
+// NewUnauthorizedError creates an error with a custom message
+func NewUnauthorizedError(message string) *AppError {
+	return &AppError{
+		Code:    http.StatusUnauthorized,
+		Message: message,
 	}
 }
 

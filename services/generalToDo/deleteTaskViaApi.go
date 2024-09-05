@@ -12,15 +12,6 @@ import (
 )
 
 func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodDelete {
-		errr := errs.NewInvalidRequestMethodError()
-		logger.Logger.Errorw("Invalid request method",
-			"method", r.Method,
-			"url", r.URL.Path,
-			"time", time.Now())
-		errr.ToJSON(w)
-		return
-	}
 
 	// Get the username from the URL path variable
 	username := r.URL.Path[len("/api/todo/update/"):]
@@ -33,11 +24,11 @@ func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get the task_no from the query parameter
-	taskNoStr := r.URL.Query().Get("task-no")
+	taskNoStr := r.URL.Query().Get("task")
 	taskNo, err := strconv.Atoi(taskNoStr)
 	if err != nil || taskNo <= 0 {
 		logger.Logger.Warnw("Invalid task number",
-			"task_no", taskNoStr,
+			"task", taskNoStr,
 			"time", time.Now())
 		errr := errs.NewInvalidParameterValueError()
 		errr.ToJSON(w)

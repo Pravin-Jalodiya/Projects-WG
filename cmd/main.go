@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"projects/controllers"
+	"projects/middleware" // Import the middleware package
 	"projects/services/generalToDo"
 )
 
@@ -24,9 +25,13 @@ func main() {
 
 	go func() {
 		r := mux.NewRouter()
-		r.HandleFunc("api/todo/{username}", generalToDo.ViewTaskHandler).Methods(http.MethodGet)
-		r.HandleFunc("/api/todo/update", generalToDo.AddTaskHandler).Methods(http.MethodPost)
-		r.HandleFunc("/api/todo/update/{username}", generalToDo.DeleteTaskHandler).Methods(http.MethodDelete)
+		r.HandleFunc("/login", middleware.LoginHandler).Methods(http.MethodPost)
+
+		protected := r.PathPrefix("/api/todo").Subrouter()
+		protected.Use(middleware.AuthMiddleware) // Apply middleware
+		protected.HandleFunc("/{username}", generalToDo.ViewTaskHandler).Methods(http.MethodGet)
+		protected.HandleFunc("/update/{username}", generalToDo.AddTaskHandler).Methods(http.MethodPost)
+		protected.HandleFunc("/update/{username}", generalToDo.DeleteTaskHandler).Methods(http.MethodDelete)
 
 		http.Handle("/", r)
 		err := http.ListenAndServe(":8080", nil)

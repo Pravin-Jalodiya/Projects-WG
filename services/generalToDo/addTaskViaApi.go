@@ -14,20 +14,20 @@ import (
 )
 
 func AddTaskHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		errr := errs.NewInvalidRequestMethodError()
-		logger.Logger.Errorw("Invalid request method",
-			"method", r.Method,
-			"url", r.URL.Path,
+
+	// Get the username from the URL path variable
+	username := r.URL.Path[len("/api/todo/update/"):]
+	if username == "" {
+		logger.Logger.Warnw("Username not provided",
 			"time", time.Now())
+		errr := errs.NewInvalidParameterError()
 		errr.ToJSON(w)
 		return
 	}
 
 	var request struct {
-		Username string `json:"username"`
-		Task     string `json:"task"`
-		LastDay  int    `json:"last_day"`
+		Task    string `json:"task"`
+		LastDay int    `json:"last_day"`
 	}
 
 	err := json.NewDecoder(r.Body).Decode(&request)
@@ -48,7 +48,7 @@ func AddTaskHandler(w http.ResponseWriter, r *http.Request) {
 	var userExist bool = false
 
 	for i, val := range readers.UserStore {
-		if val.Username == request.Username {
+		if val.Username == username {
 			userExist = true
 			readers.UserStore[i].GeneralTodo = append(readers.UserStore[i].GeneralTodo, todo)
 			break
@@ -57,7 +57,7 @@ func AddTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 	if !userExist {
 		logger.Logger.Warnw("User not found",
-			"username", request.Username,
+			"username", username,
 			"time", time.Now())
 		errr := errs.NewNotFoundError()
 		errr.ToJSON(w)
@@ -74,8 +74,10 @@ func AddTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	todo.Deadline = ConvertToHHMMSS(todo.Deadline)
+
 	logger.Logger.Infow("Task added successfully",
-		"username", request.Username,
+		"username", username,
 		"task", todo.Task,
 		"deadline", todo.Deadline,
 		"time", time.Now())
@@ -88,4 +90,19 @@ func AddTaskHandler(w http.ResponseWriter, r *http.Request) {
 			"time", time.Now())
 		return
 	}
+}
+
+// ConvertToHHMMSS returns it in dd/mm/yyyy hh:mm:ss format.
+func ConvertToHHMMSS(t time.Time) time.Time {
+	// Create a new time object with the same values but truncated to seconds precision
+	return time.Date(
+		t.Year(),
+		t.Month(),
+		t.Day(),
+		t.Hour(),
+		t.Minute(),
+		t.Second(),
+		0, // Nanoseconds are set to 0
+		t.Location(),
+	)
 }

@@ -49,7 +49,7 @@ func deleteTaskViaApi(currentUser string) {
 		break
 	}
 
-	url := fmt.Sprintf("http://localhost:8080/api/todo/update/%s?task_no=%d", username, taskNo)
+	url := fmt.Sprintf("http://localhost:8080/api/todo/update/%s?task=%d", username, taskNo)
 
 	req, err := http.NewRequest("DELETE", url, nil) // No request body needed
 	if err != nil {
